@@ -15,38 +15,38 @@ datasource db {
 }
 
 model Product {
-  id       String  @id @default(uuid())
-  name     String  @db.VarChar(50)
-  category String? @db.VarChar(50)
-
-  Transaction Transaction[]
-  Inventory   Inventory[]
+  id          String       @id @default(uuid())
+  name        String       @db.VarChar(50)
+  category    String?      @db.VarChar(50)
+  transactions Transaction[]
+  inventory    Inventory[]
 
   @@map("product")
 }
 
 model Transaction {
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   productId       String
   transactionDate DateTime
   operation       Operation
   quantity        Int
-  price           Decimal  @db.Decimal(10, 2)
-  costPrice       Decimal? @db.Decimal(10, 2) @default(0.00)
-  profit          Decimal? @db.Decimal(10, 2) @default(0.00)
+  price           Decimal   @db.Decimal(10, 2)
+  costPrice       Decimal?  @db.Decimal(10, 2) @default(0.00)
+  profit          Decimal?  @db.Decimal(10, 2) @default(0.00)
 
-  Product Product @relation(fields: [productId], references: [id])
+  product         Product   @relation(fields: [productId], references: [id])
 
   @@map("transactions")
 }
 
 model Inventory {
-  id          String  @id @default(uuid())
+  id          String    @id @default(uuid())
   productId   String
+  entryDate   DateTime
   quantity    Int
-  averageCost Decimal @db.Decimal(10, 2)
+  price       Decimal   @db.Decimal(10, 2)
 
-  Product Product @relation(fields: [productId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id])
 
   @@map("inventory")
 }
