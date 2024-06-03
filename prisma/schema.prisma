@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") 
+  directUrl = env("POSTGRES_URL_NON_POOLING") 
+}
+
+model Product {
+  id       String  @id @default(uuid())
+  name     String  @db.VarChar(50)
+  category String? @db.VarChar(50)
+
+  Transaction Transaction[]
+  Inventory   Inventory[]
+
+  @@map("product")
+}
+
+model Transaction {
+  id              String   @id @default(uuid())
+  productId       String
+  transactionDate DateTime
+  operation       Operation
+  quantity        Int
+  price           Decimal  @db.Decimal(10, 2)
+  costPrice       Decimal? @db.Decimal(10, 2) @default(0.00)
+  profit          Decimal? @db.Decimal(10, 2) @default(0.00)
+
+  Product Product @relation(fields: [productId], references: [id])
+
+  @@map("transactions")
+}
+
+model Inventory {
+  id          String  @id @default(uuid())
+  productId   String
+  quantity    Int
+  averageCost Decimal @db.Decimal(10, 2)
+
+  Product Product @relation(fields: [productId], references: [id])
+
+  @@map("inventory")
+}
+
+enum Operation {
+  in
+  out
+}

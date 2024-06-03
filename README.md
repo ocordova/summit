@@ -11,7 +11,7 @@ npm install
 2. Configure environment variables by creating a .env.local file similar to .env.example:
 
 ```bash
-cp .env.example .env.local
+cp .env.example .env
 ```
 
 3. Run the development server:
