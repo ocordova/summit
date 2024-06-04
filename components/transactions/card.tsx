@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import getTransactions from "@/app/actions/get-transactions";
 import { columns } from "./column";
 import { Suspense } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 async function GetTransactions() {
   noStore();
@@ -21,7 +22,15 @@ export default function Transactions() {
           <CardTitle>Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="space-y-2">
+                <Skeleton className="h-4 rounded-xl" />
+                <Skeleton className="h-4 rounded-xl" />
+                <Skeleton className="h-4 rounded-xl" />
+              </div>
+            }
+          >
             <GetTransactions />
           </Suspense>
         </CardContent>

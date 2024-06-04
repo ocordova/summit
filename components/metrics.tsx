@@ -70,12 +70,18 @@ async function GetMetrics() {
 
 const LoadingMarkup = (
   <>
-    <Skeleton className="h-24 rounded-xl" />
-    <Skeleton className="h-24 rounded-xl" />
-    <Skeleton className="h-24 rounded-xl" />
-    <Skeleton className="h-24 rounded-xl" />
-    <Skeleton className="h-24 rounded-xl" />
-    <Skeleton className="h-24 rounded-xl" />
+    <Skeleton className="h-5 w-[8rem] rounded-xl" />
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Skeleton className="h-24 rounded-xl" />
+      <Skeleton className="h-24 rounded-xl" />
+      <Skeleton className="h-24 rounded-xl" />
+    </div>
+    <Skeleton className="h-5 w-[8rem] rounded-xl" />
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Skeleton className="h-24 rounded-xl" />
+      <Skeleton className="h-24 rounded-xl" />
+      <Skeleton className="h-24 rounded-xl" />
+    </div>
   </>
 );
 

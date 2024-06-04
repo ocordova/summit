@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import getInventory from "@/app/actions/get-inventory";
 import { Suspense } from "react";
 import { columns } from "./columns";
+import { Skeleton } from "../ui/skeleton";
 
 async function GetInventory() {
   noStore();
@@ -20,7 +21,15 @@ export default async function Inventory() {
           <CardTitle>Inventory</CardTitle>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="space-y-2">
+                <Skeleton className="h-4 rounded-xl" />
+                <Skeleton className="h-4 rounded-xl" />
+                <Skeleton className="h-4 rounded-xl" />
+              </div>
+            }
+          >
             <GetInventory />
           </Suspense>
         </CardContent>
