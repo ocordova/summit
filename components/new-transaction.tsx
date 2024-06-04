@@ -7,7 +7,17 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "./ui/input";
+
 import { Button } from "./ui/button";
 import {
   Select,
@@ -18,64 +28,156 @@ import {
 } from "./ui/select";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { Label } from "./ui/label";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { newTransactionSchema } from "@/schemas/new-transaction";
+import { RadioGroup } from "@radix-ui/react-radio-group";
+import { RadioGroupItem } from "./ui/radio-group";
+import Link from "next/link";
+import postTransaction from "@/app/actions/post-transaction";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function NewTransaction({ products }: { products: Product[] }) {
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof newTransactionSchema>>({
+    resolver: zodResolver(newTransactionSchema),
+    defaultValues: {
+      product: "",
+      operation: "in",
+      quantity: undefined,
+      price: undefined,
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof newTransactionSchema>) {
+    const { product, operation, quantity, price } = values;
+
+    await postTransaction({
+      productId: product,
+      operation,
+      quantity,
+      price,
+    });
+
+    toast.success("Transaction has been added successfully");
+    router.push("/");
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Add Transaction</CardTitle>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Product</Label>
-              <Select>
-                <SelectTrigger id="product">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {products.map((product) => (
-                    <SelectItem key={product.id} value={product.id}>
-                      {product.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="product"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="product">Product</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger id="product">
+                      <SelectValue placeholder="Select a product" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      {products.map((product) => (
+                        <SelectItem key={product.id} value={product.id}>
+                          {product.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage>
+                    {form.formState.errors.product?.message}
+                  </FormMessage>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="operation"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Operation</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="in" />
+                        </FormControl>
+                        <FormLabel className="font-normal">In</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="out" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Out</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage>
+                    {form.formState.errors.operation?.message}
+                  </FormMessage>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="quantity">Quantity</FormLabel>
+                  <Input
+                    id="quantity"
+                    placeholder="4"
+                    type="number"
+                    {...field}
+                  />
+                  <FormMessage>
+                    {form.formState.errors.quantity?.message}
+                  </FormMessage>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="price">Price</FormLabel>
+                  <Input
+                    id="price"
+                    placeholder="100"
+                    type="number"
+                    {...field}
+                  />
+                  <FormMessage>
+                    {form.formState.errors.price?.message}
+                  </FormMessage>
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-between py-4">
+              <div></div>
+              <div className="flex gap-2">
+                <Link href="/">
+                  <Button variant="outline">Cancel</Button>
+                </Link>
+                <Button type="submit">Save</Button>
+              </div>
             </div>
-            <div className="flex w-[5rem] flex-col space-y-1.5">
-              <Label htmlFor="operation">Operation</Label>
-              <ToggleGroup type="single">
-                <ToggleGroupItem
-                  defaultChecked
-                  value="in"
-                  aria-label="Toggle in"
-                >
-                  In
-                </ToggleGroupItem>
-                <ToggleGroupItem value="out" aria-label="Toggle out">
-                  Out
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="amount">Quantity</Label>
-              <Input id="quantity" placeholder="4" type="number" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="price">Price</Label>
-              <Input id="price" placeholder="100" type="number" />
-            </div>
-          </div>
-        </form>
+          </form>
+        </Form>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <div></div>
-        <div className="flex gap-2">
-          <Button variant="outline">Cancel</Button>
-          <Button>Save</Button>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

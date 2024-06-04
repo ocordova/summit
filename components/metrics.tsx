@@ -8,17 +8,27 @@ import { Skeleton } from "./ui/skeleton";
 function MetricCard({
   title,
   value,
+  isMoney,
 }: {
   title: string;
   value: Prisma.Decimal | number;
+  isMoney?: boolean;
 }) {
+  const formattedValue =
+    isMoney && value instanceof Prisma.Decimal
+      ? value.toNumber().toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        })
+      : value.toLocaleString("en-US");
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{Number(value)}</div>
+        <div className="text-2xl font-bold">{formattedValue}</div>
       </CardContent>
     </Card>
   );
@@ -38,12 +48,16 @@ async function GetMetrics() {
 
   return (
     <>
-      <MetricCard title="Total Profit" value={totalProfit} />
-      <MetricCard title="Avg Profit Sale" value={averageProfitPerSale} />
+      <MetricCard isMoney title="Total Profit" value={totalProfit} />
+      <MetricCard
+        isMoney
+        title="Avg Profit per Sale"
+        value={averageProfitPerSale}
+      />
       <MetricCard title="Total Sales" value={totalSales} />
-      <MetricCard title="Total Revenue" value={totalRevenue} />
-      <MetricCard title="Total Cost" value={totalCosts} />
-      <MetricCard title="Inventory Value" value={inventoryValue} />
+      <MetricCard isMoney title="Total Revenue" value={totalRevenue} />
+      <MetricCard isMoney title="Total Cost" value={totalCosts} />
+      <MetricCard isMoney title="Inventory Value" value={inventoryValue} />
     </>
   );
 }

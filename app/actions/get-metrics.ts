@@ -1,3 +1,4 @@
+"use server";
 import { PrismaClient, Operation } from "@prisma/client";
 
 const prisma = new PrismaClient();
