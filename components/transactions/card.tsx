@@ -10,7 +10,6 @@ async function GetTransactions() {
   noStore();
   const transactions = await getTransactions();
   const data = JSON.parse(JSON.stringify(transactions));
-  console.log(data);
   return <DataTable columns={columns} data={data} />;
 }
 
