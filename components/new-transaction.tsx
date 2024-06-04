@@ -23,7 +23,7 @@ export default function NewTransaction({ products }: { products: Product[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add new transaction</CardTitle>
+        <CardTitle>Add Transaction</CardTitle>
       </CardHeader>
       <CardContent>
         <form>
