@@ -11,16 +11,16 @@ function MetricCard({
   isMoney,
 }: {
   title: string;
-  value: Prisma.Decimal | number;
+  value: number;
   isMoney?: boolean;
 }) {
-  const formattedValue =
-    isMoney && value instanceof Prisma.Decimal
-      ? value.toNumber().toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : value.toLocaleString("en-US");
+  // Format thousand separator and decimal places
+  const formattedValue = isMoney
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(value)
+    : new Intl.NumberFormat("en-US").format(value);
 
   return (
     <Card>
@@ -38,27 +38,33 @@ async function GetMetrics() {
   noStore();
   const metrics = await getMetrics();
   const {
+    totalUnitsSold,
+    averagePrice,
+    inventoryCount,
     totalProfit,
-    averageProfitPerSale,
-    totalSales,
-    totalRevenue,
-    totalCosts,
     inventoryValue,
+    totalRevenue,
   } = metrics;
 
   return (
-    <>
-      <MetricCard isMoney title="Total Profit" value={totalProfit} />
-      <MetricCard
-        isMoney
-        title="Avg Profit per Sale"
-        value={averageProfitPerSale}
-      />
-      <MetricCard title="Total Sales" value={totalSales} />
-      <MetricCard isMoney title="Total Revenue" value={totalRevenue} />
-      <MetricCard isMoney title="Total Cost" value={totalCosts} />
-      <MetricCard isMoney title="Inventory Value" value={inventoryValue} />
-    </>
+    <div>
+      <div className="mb-4 font-semibold leading-none tracking-tight">
+        Financial Metrics
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <MetricCard isMoney title="Total Revenue" value={totalRevenue} />
+        <MetricCard isMoney title="Total Profit" value={totalProfit} />
+        <MetricCard title="Total Units Sold" value={totalUnitsSold} />
+      </div>
+      <div className="mb-4 mt-8 font-semibold leading-none tracking-tight">
+        Inventory Metrics
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <MetricCard title="Inventory Count" value={inventoryCount} />
+        <MetricCard isMoney title="Inventory Value" value={inventoryValue} />
+        <MetricCard isMoney title="Average Price" value={averagePrice} />
+      </div>
+    </div>
   );
 }
 
@@ -75,10 +81,8 @@ const LoadingMarkup = (
 
 export default async function Metrics() {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Suspense fallback={<>{LoadingMarkup}</>}>
-        <GetMetrics />
-      </Suspense>
-    </div>
+    <Suspense fallback={<>{LoadingMarkup}</>}>
+      <GetMetrics />
+    </Suspense>
   );
 }

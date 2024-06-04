@@ -11,7 +11,7 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const date = row.getValue("transactionDate") as string;
       const dateObj = parseISO(date);
-      const formatted = format(dateObj, "dd, MMMM, yyyy");
+      const formatted = format(dateObj, "dd, MMM, yyyy HH:mm");
       return <span>{formatted}</span>;
     },
   },
@@ -52,14 +52,33 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
   {
-    accessorKey: "costPrice",
-    header: "Cost Price",
+    accessorKey: "purchasePrice",
+    header: "Purchase Price",
     cell: ({ row }) => {
-      const costPrice = row.getValue("costPrice") as number;
-      if (costPrice === null) {
+      const purchasePrice = row.getValue("purchasePrice") as number;
+      if (purchasePrice === null) {
         return <span></span>;
       }
-      return <span>{costPrice}</span>;
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(purchasePrice);
+      return <span>{formatted}</span>;
+    },
+  },
+  {
+    accessorKey: "profit",
+    header: "Profit",
+    cell: ({ row }) => {
+      const profit = row.getValue("profit") as number;
+      if (profit === null) {
+        return <span></span>;
+      }
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(profit);
+      return <span>{formatted}</span>;
     },
   },
 ];

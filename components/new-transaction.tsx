@@ -41,11 +41,12 @@ import { toast } from "sonner";
 
 export default function NewTransaction({ products }: { products: Product[] }) {
   const router = useRouter();
+  const defaultFirstProduct = products[0].id;
 
   const form = useForm<z.infer<typeof newTransactionSchema>>({
     resolver: zodResolver(newTransactionSchema),
     defaultValues: {
-      product: "",
+      product: defaultFirstProduct,
       operation: "in",
       quantity: undefined,
       price: undefined,

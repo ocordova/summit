@@ -13,9 +13,7 @@ export default async function getInventory() {
       },
     },
     orderBy: {
-      product: {
-        name: "asc",
-      },
+      entryDate: "asc",
     },
   });
 

@@ -34,7 +34,7 @@ export const columns: ColumnDef<Inventory>[] = [
     cell: ({ row }) => {
       const date = row.getValue("entryDate") as string;
       const dateObj = parseISO(date);
-      const formatted = format(dateObj, "dd, MMMM, yyyy");
+      const formatted = format(dateObj, "dd, MMM, yyyy HH:mm");
       return <span>{formatted}</span>;
     },
   },
