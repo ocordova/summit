@@ -1,4 +1,4 @@
-# Ammper Next.js Challenge
+# Summit Challenge
 
 ## Getting Started
 
