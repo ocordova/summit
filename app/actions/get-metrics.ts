@@ -32,7 +32,7 @@ async function calculateRevenue() {
   });
 
   const totalRevenue = transactions.reduce((sum, transaction) => {
-    return (sum + Number(transaction.price)) * transaction.quantity;
+    return sum + Number(transaction.price) * transaction.quantity;
   }, 0);
 
   return totalRevenue;
