@@ -10,6 +10,8 @@ The inventory management system handles warehouse inventory using the FIFO (Firs
 
 For more details, refer to the full [system documentation](https://ocordova.notion.site/PRD-Summit-e1b4893756ab40fdb97f7f5deddafaf1).
 
+![System Wireframe](/docs/20240606-hpdy.png)
+
 ## Getting Started
 
 1. Install the npm dependencies:
