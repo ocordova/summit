@@ -1,4 +1,14 @@
-# Summit Challenge
+# Summit Coding Challenge
+
+The inventory management system handles warehouse inventory using the FIFO (First-In-First-Out) method. It provides:
+
+- Real-time inventory tracking
+- Entry and exit price recording
+- Average cost calculation
+- Detailed transaction histories
+- Accurate profit calculation
+
+For more details, refer to the full [system documentation](https://ocordova.notion.site/PRD-Summit-e1b4893756ab40fdb97f7f5deddafaf1).
 
 ## Getting Started
 
