@@ -111,17 +111,21 @@ export default function NewTransaction({ products }: { products: Product[] }) {
                       defaultValue={field.value}
                       className="flex flex-row space-x-4"
                     >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="in" />
+                          <RadioGroupItem value="in" id="in" />
                         </FormControl>
-                        <FormLabel className="font-normal">In</FormLabel>
+                        <FormLabel className="pl-2 font-normal" htmlFor="in">
+                          In
+                        </FormLabel>
                       </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="out" />
+                          <RadioGroupItem value="out" id="out" />
                         </FormControl>
-                        <FormLabel className="font-normal">Out</FormLabel>
+                        <FormLabel className="pl-2 font-normal" htmlFor="out">
+                          Out
+                        </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
